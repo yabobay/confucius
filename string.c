@@ -24,20 +24,20 @@ char *utf8encode(int codepoint) {
     char *s = strdup("");
     char cs[4] = {};
     if (codepoint < 1 << 7) {
-	catChar(&s, codepoint);
-	goto glue;
+        catChar(&s, codepoint);
+        goto glue;
     }
 
     cs[3] = 0b1000 << 4 | grab(codepoint, 0b111111, 0);
     if (codepoint < 1 << 11) {
-	cs[0] = 0b110 << 5 | grab(codepoint, 0b11111, 6);
-	goto glue;
+        cs[0] = 0b110 << 5 | grab(codepoint, 0b11111, 6);
+        goto glue;
     }
 
     cs[2] = 0b1000 << 4 | grab(codepoint, 0b111111, 6);
     if (codepoint < 1 << 16) {
-	cs[0] = 0b1110 << 4 | grab(codepoint, 0b1111, 12);
-	goto glue;
+        cs[0] = 0b1110 << 4 | grab(codepoint, 0b1111, 12);
+        goto glue;
     }
 
     cs[1] = 0b10 << 6 | grab(codepoint, 0b111111, 12);
@@ -45,7 +45,7 @@ char *utf8encode(int codepoint) {
 
 glue:
     for (int i = 0; i < 4; i++)
-	if (cs[i])
-	    catChar(&s, cs[i]);
+        if (cs[i])
+            catChar(&s, cs[i]);
     return s;
 }
